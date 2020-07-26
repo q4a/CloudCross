@@ -24,6 +24,7 @@ jobs:
         cd bin
         qmake ../CloudCross.pro
         dir
+      shell: cmd
     - name: MSBuild
       working-directory: bin
       run: msbuild /p:Configuration=${{ matrix.Configuration }} /p:Platform=${{ matrix.Platform }} CloudCross.sln 
