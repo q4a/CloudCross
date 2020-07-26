@@ -1,0 +1,29 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build-windows:
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:
+        Configuration: [Debug]
+        Platform: [x64]
+#        Configuration: [Debug, Mixed, Release]
+#        Platform: [x64, x86]
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+    - name: Create VC Solution
+      run: |
+        mkdir bin
+        cd bin
+        qmake ../CloudCross.pro
+        dir
+    - name: MSBuild
+      working-directory: bin
+      run: msbuild /p:Configuration=${{ matrix.Configuration }} /p:Platform=${{ matrix.Platform }} CloudCross.sln 
